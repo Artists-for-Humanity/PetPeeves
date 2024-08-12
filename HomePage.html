@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+  <title>Pet Peeves</title>
+
+  <style type = "text/css">
+    body
+    {
+      background: #ffE3e4;
+    }
+
+    canvas
+    {
+      display: block;
+      margin: auto;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <script type = "text/javascript">
+  const script = document.createElement('script');
+  script.src = 'moneySystem.js';
+  document.head.appendChild(script);
+  
+  var config = 
+    {
+      type: Phaser.AUTO,
+      width: 1500,
+      height: 1000,
+      scene: 
+      {
+        preload: preload,
+        create: create,
+        update: update,
+      }
+    }
+    
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+
+      this.load.image('dogidle', 'dog_sprites/dog-wip.png');
+      this.load.image('dogeat', 'dog_sprites/eat-wip.png');
+      this.load.image('dogbath', 'dog_sprites/bathWip.png');
+
+      this.load.image('shop','sprites/shopbutton-wip.png');
+      this.load.image('bg', "sprites/house-Wip.png");
+      this.load.image('ball', 'sprites/ball-wip.png');
+      this.load.image('food', 'sprites/dogfood-wip.png');
+      this.load.image('soap', 'sprites/soap-wip.png');
+      
+      this.load.image('minigameMenu', 'sprites/minigame_menu.png');
+      this.load.image('tossButton', 'sprites/tossButton.png');
+      this.load.image('tug', 'sprites/tugButton.png');
+
+
+    }
+
+    function create ()
+    {
+
+      loadMoney();
+
+      //center of screen
+      x = this.cameras.main.width/2;
+      y = this.cameras.main.height/2;
+      this.add.image(x, y, 'bg');
+
+      const shop_button = this.add.image(100, 900, 'shop');
+      const ball_button = this.add.image(1400, 100, 'ball');
+      const food_button = this.add.image(1400, 300, 'food');
+      const soap_button = this.add.image(1400, 500, 'soap');
+
+      const dogidle = this.add.image(x, 690, 'dogidle');
+      const dogeat = this.add.image(x, 690, 'dogeat');
+      dogeat.visible = false;
+      const dogbath = this.add.image(x, 690, 'dogbath');
+      dogbath.visible = false;
+
+      miniGame = this.add.image(x, y, 'minigameMenu')
+      miniGame.visible = false;
+
+      toss_Button = this.add.image(x, y - 300, 'tossButton')
+      toss_Button.visible = false;
+      toss_Button.disableInteractive();
+      toss_Button.on('pointerover', () => toss_Button.setScale(1.02));
+      toss_Button.on('pointerout', () => toss_Button.setScale(1));
+      toss_Button.on('pointerdown', () => window.location.href="toss.html");
+
+      tug = this.add.image(x, y - 100, 'tug');
+      tug.visible = false;
+      tug.disableInteractive();
+      tug.on('pointerover', () => tug.setScale(1.02));
+      tug.on('pointerout', () => tug.setScale(1));
+      tug.on('pointerdown', () => window.location.href="minigame2.html");
+
+
+      shop_button.setInteractive();
+      shop_button.on('pointerover', () => shop_button.setScale(1.02));
+      shop_button.on('pointerout', () => shop_button.setScale(1.0));
+      shop_button.on('pointerdown', () => window.location.href="Shop.html");
+
+      var click = 0;
+
+      ball_button.setInteractive();
+      ball_button.on('pointerover', () => ball_button.setScale(1.02));
+      ball_button.on('pointerout', () => ball_button.setScale(1));
+      ball_button.on('pointerdown', () =>
+      { 
+        click += 1;
+        if (click == 1) {
+          miniGame.visible = true;
+          toss_Button.visible = true
+          tug.visible = true;
+          toss_Button.setInteractive();
+          tug.setInteractive();
+          food_button.disableInteractive();
+          soap_button.disableInteractive();
+          shop_button.disableInteractive();
+        } if (click == 2)
+        {
+          miniGame.visible = false;
+          toss_Button.visible = false;
+          tug.visible = false;
+          toss_Button.disableInteractive();
+          tug.disableInteractive();
+          food_button.setInteractive();
+          soap_button.setInteractive();
+          shop_button.setInteractive();
+          click = 0;
+        }
+      }
+      )
+      
+
+     food_button.setInteractive();
+      food_button.on('pointerover', () => food_button.setScale(1.02));
+      food_button.on('pointerout', () => food_button.setScale(1));
+      food_button.on('pointerdown', () =>  
+      {
+        dogeat.visible = true;
+        dogidle.visible = false;
+
+        food_button.disableInteractive();
+        soap_button.disableInteractive();
+        shop_button.disableInteractive();
+        ball_button.disableInteractive();
+
+        setTimeout( () =>
+        {
+          dogeat.visible = false;
+          dogidle.visible = true;
+
+          food_button.setInteractive();
+          soap_button.setInteractive();
+          shop_button.setInteractive();
+          ball_button.setInteractive();
+
+        }, 1500
+        );
+      }
+      )
+
+      soap_button.setInteractive();
+      soap_button.on('pointerover', () => soap_button.setScale(1.02));
+      soap_button.on('pointerout', () => soap_button.setScale(1));
+      soap_button.on('pointerdown', () =>
+      {
+        dogbath.visible = true;
+        dogidle.visible = false;
+
+        food_button.disableInteractive();
+        soap_button.disableInteractive();
+        shop_button.disableInteractive();
+        ball_button.disableInteractive();
+
+        setTimeout( () =>
+        {
+          dogbath.visible = false;
+          dogidle.visible = true;
+
+          food_button.setInteractive();
+          soap_button.setInteractive();
+          shop_button.setInteractive();
+          ball_button.setInteractive();
+          
+        }, 1500
+        );
+
+
+
+      }
+      )
+
+      moneyText = this.add.text(x + 475, y + 450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
+    }
+
+    function update ()
+    {
+    }
+
+  </script>
+
+</body>
+
+<script src="moneySystem.js"></script>
+
+</html>

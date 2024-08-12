@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+  <title>Shop</title>
+
+  <style type = "text/css">
+    body
+    {
+      background: #ffE3e4;
+    }
+
+    canvas
+    {
+      display: block;
+      margin: auto;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <script type = "text/javascript">
+  const script = document.createElement('script');
+  script.src = 'moneySystem.js';
+  document.head.appendChild(script);
+  
+  var config = 
+    {
+      type: Phaser.AUTO,
+      width: 1500,
+      height: 1000,
+      scene: 
+      {
+        preload: preload,
+        create: create,
+        update: update,
+      }
+    }
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+      this.load.image('shopbg', 'sprites/shop_background.png');
+      this.load.image('backButton', 'sprites/back_button.png');
+      this.load.image('cart', 'sprites/testing sprites/cart.png');
+      this.load.image('stuff', 'sprites/testing sprites/stuff.png');
+      this.load.image('cheapstuff', 'sprites/testing sprites/stuff 2.png');
+    }
+
+    function create ()
+    {
+      loadMoney();
+
+      const x = this.cameras.main.width/2;
+      const y = this.cameras.main.height/2;
+      this.add.image(x, y, 'shopbg');
+
+      backButton = this.add.image(100, 100, 'backButton');
+      backButton.setInteractive();
+      backButton.on('pointerover', () => backButton.setScale(1.02));
+      backButton.on('pointerout', () => backButton.setScale(1));
+      backButton.on('pointerdown', () => window.location.href = 'HomePage.html');
+
+      var stuff = this.add.image(x - 500, y - 50, 'stuff');
+      var cheapstuff = this.add.image(x + 500, y - 50, 'cheapstuff');
+
+      stuff.setInteractive();
+      this.input.setDraggable(stuff);
+      stuff.on('drag', function (p, x, y)
+      {
+        stuff.x = x;
+        stuff.y = y;
+        cheapstuff.disableInteractive();
+      });
+      stuff.on('pointerup', function () 
+      {
+        stuff.x = x - 500
+        stuff.y = y - 50
+        cheapstuff.setInteractive();
+      });
+      stuff.on('pointerdown', function ()
+      {
+        subtractMoney(30);
+      });
+      
+      cheapstuff.setInteractive();
+      this.input.setDraggable(cheapstuff);
+      cheapstuff.on('drag', function (p, x, y)
+      {
+        cheapstuff.x = x;
+        cheapstuff.y = y;
+        stuff.disableInteractive();
+      });
+      cheapstuff.on('pointerup', function ()
+      {
+        cheapstuff.x = x + 500
+        cheapstuff.y = y - 50
+        stuff.setInteractive();
+      });
+      cheapstuff.on('pointerdown', function ()
+      {
+        addMoney(10);
+      });
+    
+      const cart = this.add.image(x + 50, y + 400, 'cart');
+
+      moneyText = this.add.text(x-130, y-450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
+    }
+
+    function update ()
+    {
+    }
+    
+  </script>
+
+</body>
+
+<script src="moneySystem.js"></script>
+
+</html>
