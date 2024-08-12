@@ -24,6 +24,14 @@
 
 
 <body>
+    <img src="./sprites/photo-frame.png" style="position: absolute; left: 40%; width: 20vw; height: 40vh;">
+    <div class="mainScore" style=" font-size: 3vw; position: absolute; top: 25vh; left: 45%;" id="scoreDisplay"> Score: 0</div>
+ 
+
+
+
+
+
   <script type = "text/javascript">
   const script = document.createElement('script');
   script.src = 'moneySystem.js';
@@ -169,11 +177,23 @@
       }
       )
 
+     
+      let score = 0;
+
+      
+      function updateScoreDisplay() {
+        document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
+      }
+
+      
       soap_button.setInteractive();
       soap_button.on('pointerover', () => soap_button.setScale(1.02));
       soap_button.on('pointerout', () => soap_button.setScale(1));
-      soap_button.on('pointerdown', () =>
-      {
+      soap_button.on('pointerdown', () => {
+       
+        score++;
+        updateScoreDisplay(); 
+        
         dogbath.visible = true;
         dogidle.visible = false;
 
@@ -182,8 +202,7 @@
         shop_button.disableInteractive();
         ball_button.disableInteractive();
 
-        setTimeout( () =>
-        {
+        setTimeout(() => {
           dogbath.visible = false;
           dogidle.visible = true;
 
@@ -192,13 +211,9 @@
           shop_button.setInteractive();
           ball_button.setInteractive();
           
-        }, 1500
-        );
+        }, 1500);
+      });
 
-
-
-      }
-      )
 
       moneyText = this.add.text(x + 475, y + 450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
     }
