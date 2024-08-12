@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Peeves</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+  <style type = "text/css">
+    body
+    {
+      background: #ffE3e4;
+    }
+
+    canvas
+    {
+      display: block;
+      margin: auto;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+
+  <script type = "text/javascript">
+    var config = {
+      type: Phaser.AUTO,
+      width: 1500,
+      height: 1000,
+      physics: {
+        default: 'arcade',
+        arcade:
+        {
+          gravity: { y: 300},
+          debug: true
+        }
+      },
+
+      scene:
+      {
+        preload: preload,
+        create: create,
+        update: update,
+      }
+
+    }
+
+    var ball;
+
+    var game = new Phaser.Game(config);
+    // this.position = new Phaser.Point();
+
+
+    function preload ()
+    {
+      this.load.image('ball','sprites/ball.png', { frameWidth: 32, frameHeight: 48 });
+    }
+
+    function create ()
+    {
+
+      ball = this.physics.add.image(100, 500, 'ball');
+
+      ball.setBounce(0.4);
+      ball.setCollideWorldBounds(true);
+      ball.setInteractive ();
+
+    }
+
+    function update ()
+    {
+      this.input.on('pointerdown', () => {
+    
+      if ((game.input.mousePointer.x < ball.x + 50) && (game.input.mousePointer.x > ball.x - 50) && (game.input.mousePointer.y > ball.y - 50) && (game.input.mousePointer.y < ball.y + 50)){
+            console.log('X = ' + ball.x + ', Y = ' + ball.y);
+            console.log('Pointer X = ' + game.input.mousePointer.x );
+            ball.setVelocity(500, -300);
+            console.log('reachme00')
+      }
+    })
+
+    }
+
+  </script>
+
+</body>
+</html>
