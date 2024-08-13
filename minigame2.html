@@ -42,6 +42,7 @@
     }
 
     var game = new Phaser.Game(config);
+
     var dog;
 
     var playerPoints = 0;
@@ -51,9 +52,12 @@
       this.load.spritesheet('dogrun', 'idk/spritesheet (3).png', { frameWidth: 250, frameHeight: 198 });
       this.load.image('bone', 'idk/bones.png');
       this.load.image('ground', 'idk/ground.png');
+      this.load.image('winscreen', 'idk/win.png');
+      this.load.image('button', 'idk/continue button.png');
     }
 
-    function create() {
+    function create() 
+    {
       // Center of screen
       let x = this.cameras.main.width / 2;
       let y = this.cameras.main.height / 2;
@@ -155,7 +159,9 @@
       playerPoints += 1;
       pointText.setText('score: ' + playerPoints);
     }
-  </script>
+  
+    </script>
   <script src="moneySystem.js"></script>
+  <script src = "timer.js"></script>
 </body>
 </html>
