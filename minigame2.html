@@ -67,8 +67,8 @@
 
         this.add.image(x, 1000, "ground");
 
-        const numBones = 4;
-        const minDistance = 200;
+        const numBones = 10;
+        const minDistance = 100;
 
         bones = this.physics.add.group();
 
@@ -133,10 +133,11 @@
 
         this.physics.add.overlap(dog, bones, addPoints, null, this);
 
-        pointText = this.add.text(x, y, "score: 0");
+        pointText = this.add.text(1300, 50, "score: 0", {fontFamily: 'Arial Black', fontSize: "32px", fill: '#ffffff'});
 
         // create timer text
-        timerText = this.add.text(x, 50, "Time left: " + timeLeft, {
+        timerText = this.add.text(50, 50, "Time left: " + timeLeft, {
+          fontFamily: 'Arial Black',
           fontSize: "32px",
           fill: "#ffffff",
         });
@@ -148,6 +149,17 @@
           callbackScope: this,
           loop: true,
         });
+
+        win = this.add.image(x, y, 'winscreen');
+        button = this.add.image(x + 320, y + 200, 'button');
+
+        button.visible = false;
+        win.visible = false;
+
+        button.setInteractive();
+        button.on('pointerdown', () => window.location.href="HomePage.html");
+        button.on('pointerover', () => button.setScale(1.02));
+        button.on('pointerout', () => button.setScale(1));
       }
 
       function update() {
@@ -185,19 +197,21 @@
           timerText.setText("Time left: " + timeLeft);
         } else {
           this.scene.pause();
-          // Display win or lose screen here
-          this.add
-            .text(
-              this.cameras.main.width / 2,
-              this.cameras.main.height / 2,
-              "Time Up!",
-              { fontSize: "64px", fill: "#ffffff" }
-            )
-            .setOrigin(0.5);
+          timesup = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, "Times Up!", { fontFamily: 'Arial Black', fontSize: "64px", fill: "#ffffff" }).setOrigin(0.5);
+          setTimeout( () => {
+            button.visible = true;
+            win.visible = true;
+            timesup.destroy();
+          }, 1500)
         }
       }
     </script>
+<<<<<<< Updated upstream
     <script src="moneySystem.js"></script>
-    <script src="timer.js"></script>
   </body>
 </html>
+=======
+  <script src="moneySystem.js"></script>
+</body>
+</html>
+>>>>>>> Stashed changes
