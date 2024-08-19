@@ -49,8 +49,12 @@
       this.load.image('shopbg', 'sprites/shop_background.png');
       this.load.image('backButton', 'sprites/back_button.png');
       this.load.image('cart', 'sprites/testing sprites/cart.png');
-      this.load.image('stuff', 'sprites/testing sprites/stuff.png');
-      this.load.image('cheapstuff', 'sprites/testing sprites/stuff 2.png');
+      this.load.image('shampoo1', 'sprites/shampoo1.png');
+      this.load.image('shampoo2', 'sprites/shampoo2.png')
+
+
+      //this.load.image('stuff', 'sprites/testing sprites/stuff.png');
+      //this.load.image('cheapstuff', 'sprites/testing sprites/stuff 2.png');
     }
 
     function create ()
@@ -67,50 +71,34 @@
       backButton.on('pointerout', () => backButton.setScale(1));
       backButton.on('pointerdown', () => window.location.href = 'HomePage.html');
 
-      var stuff = this.add.image(x - 500, y - 50, 'stuff');
-      var cheapstuff = this.add.image(x + 500, y - 50, 'cheapstuff');
+      var shampoo1 = this.add.image(x - 500, y - 50, 'shampoo1');
+      var shampoo2 = this.add.image(x + 500, y - 50, 'shampoo2');
 
-      stuff.setInteractive();
-      this.input.setDraggable(stuff);
-      stuff.on('drag', function (p, x, y)
-      {
-        stuff.x = x;
-        stuff.y = y;
-        cheapstuff.disableInteractive();
-      });
-      stuff.on('pointerup', function () 
-      {
-        stuff.x = x - 500
-        stuff.y = y - 50
-        cheapstuff.setInteractive();
-      });
-      stuff.on('pointerdown', function ()
-      {
-        subtractMoney(30);
-      });
-      
-      cheapstuff.setInteractive();
-      this.input.setDraggable(cheapstuff);
-      cheapstuff.on('drag', function (p, x, y)
-      {
-        cheapstuff.x = x;
-        cheapstuff.y = y;
-        stuff.disableInteractive();
-      });
-      cheapstuff.on('pointerup', function ()
-      {
-        cheapstuff.x = x + 500
-        cheapstuff.y = y - 50
-        stuff.setInteractive();
-      });
-      cheapstuff.on('pointerdown', function ()
-      {
-        addMoney(10);
-      });
+      shampoo1.setInteractive();
+      shampoo1.on('pointerdown', function () {subtractMoney(10);});
+      shampoo1.on('pointerover', function () {shampoo1.setScale(1.1)});
+      shampoo1.on('pointerout', function () {shampoo1.setScale(1)});
+
+      shampoo2.setInteractive();
+      shampoo2.setScale(.35)
+      shampoo2.on('pointerdown', function () {subtractMoney(20)});
+      shampoo2.on('pointerover', function () {shampoo2.setScale(.36)});
+      shampoo2.on('pointerout', function () {shampoo2.setScale(.35)})
     
       const cart = this.add.image(x + 50, y + 400, 'cart');
 
       moneyText = this.add.text(x-130, y-450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
+
+      var noMoney = this.add.text(x - 160, y - 100, "No Money!", { fontFamily: 'Arial Black', fontSize: '50px', fill: "#FF0000"});
+      noMoney.visible = false;
+
+      if (playerMoney <= 0)
+      {
+        noMoney.visible = true;
+      } if (playerMoney > 0)
+      {
+        noMoney.visible = false;
+      }
     }
 
     function update ()
