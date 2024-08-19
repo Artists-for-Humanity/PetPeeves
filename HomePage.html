@@ -24,8 +24,11 @@
 
 
 <body>
+  <div class="scoreClear" id="scoreClear" style="opacity: 1;">
     <img src="./sprites/photo-frame.png" style="position: absolute; left: 40%; width: 20vw; height: 40vh;">
     <div class="mainScore" style=" font-size: 3vw; position: absolute; top: 25vh; left: 45%;" id="scoreDisplay"> Score: 0</div>
+  </div>
+    
  
 
 
@@ -118,26 +121,32 @@
 
       var click = 0;
 
+
       ball_button.setInteractive();
       ball_button.on('pointerover', () => ball_button.setScale(1.02));
       ball_button.on('pointerout', () => ball_button.setScale(1));
       ball_button.on('pointerdown', () =>
       { 
+        var scoreBoard = document.getElementById("scoreClear");
+        var scoreOpacity = scoreBoard.style.opacity;
+        console.log(scoreOpacity);  // This should now correctly log the current opacity value.
         click += 1;
         if (click == 1) {
           miniGame.visible = true;
-          toss_Button.visible = true
+          toss_Button.visible = true;
           tug.visible = true;
+          scoreBoard.style.opacity = "0"; // Example of changing opacity
           toss_Button.setInteractive();
           tug.setInteractive();
           food_button.disableInteractive();
           soap_button.disableInteractive();
           shop_button.disableInteractive();
-        } if (click == 2)
-        {
+        } 
+        if (click == 2) {
           miniGame.visible = false;
           toss_Button.visible = false;
           tug.visible = false;
+          scoreBoard.style.opacity = "1"; // Example of restoring opacity
           toss_Button.disableInteractive();
           tug.disableInteractive();
           food_button.setInteractive();
@@ -145,8 +154,8 @@
           shop_button.setInteractive();
           click = 0;
         }
-      }
-      )
+      });
+
       
 
      food_button.setInteractive();
