@@ -1,161 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
-  <style type = "text/css">
-    body
-    {
-      background: #ffE3e4;
-    }
-
-    canvas
-    {
-      display: block;
-      margin: auto;
-      margin-top: 25px;
-    }
-  </style>
-</head>
-<body>
-  <script type="text/javascript">
-    
-    var config = {
-      type: Phaser.AUTO,
-      width: 1500,
-      height: 1000,
-      scene: {
-        preload: preload,
-        create: create,
-        update: update,
-      },
-      physics: {
-        default: 'arcade',
-        arcade: {
-          gravity: { y: 0 }, 
-          debug: true
-        }
-      }
-    }
-
-    var game = new Phaser.Game(config);
-    var dog;
-
-    var playerPoints = 0;
-    var pointText;
-
-    function preload() {
-      this.load.spritesheet('dogrun', 'idk/spritesheet (3).png', { frameWidth: 250, frameHeight: 198 });
-      this.load.image('bone', 'idk/bones.png');
-      this.load.image('ground', 'idk/ground.png');
-    }
-
-    function create() {
-      // Center of screen
-      let x = this.cameras.main.width / 2;
-      let y = this.cameras.main.height / 2;
-
-      this.add.image(x, 1000, 'ground');
-
-      const numBones = 4;
-      const minDistance = 200;
-
-      bones = this.physics.add.group();
-
-      for (let i = 0; i < numBones; i++) 
-      {
-        let boneX, boneY;
-        let validPosition = false;
-
-        while (!validPosition) 
-        {
-          boneX = Phaser.Math.Between(150, this.cameras.main.width - 150);
-          boneY = Phaser.Math.Between(-200, -100);
-
-          validPosition = true;
-          bones.children.iterate(function(bone) 
-          {
-            const distance = Phaser.Math.Distance.Between(boneX, boneY, bone.x, bone.y);
-            if (distance < minDistance) 
-            {
-              validPosition = false;
-            }
-          });
-        }
-        let bone = bones.create(boneX, boneY, 'bone');
-        bone.setVelocityY(Phaser.Math.Between(150, 250));
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
+    <style type="text/css">
+      body {
+        background: #ffe3e4;
       }
 
-      bones.children.iterate(function(bone) 
-      {
-        bone.setVelocityY(200)
-      });
-
-      dog = this.physics.add.sprite(x, y + 380, 'dogrun'); 
-      dog.setBounce(0.2);
-      dog.setCollideWorldBounds(true);
-
-      this.anims.create({
-        key: 'left',
-        frames: this.anims.generateFrameNumbers('dogrun', { start: 0, end: 1 }), 
-        frameRate: 10,
-        repeat: -1
-      });
-
-      this.anims.create({
-        key: 'right',
-        frames: this.anims.generateFrameNumbers('dogrun', { start: 3, end: 4 }),
-        frameRate: 10,
-        repeat: -1
-      });
-
-      this.anims.create({
-        key: 'turn',
-        frames: [ {key: 'dogrun', frame: 2} ],
-        frameRate: 20
-      });
-    
-      this.physics.add.overlap(dog, bones, addPoints, null, this);
-
-      pointText = this.add.text(x, y, 'score: 0');
-
-    }
-
-    function update () {
-      const cursors = this.input.keyboard.createCursorKeys();
+      canvas {
+        display: block;
+        margin: auto;
+        margin-top: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var config = {
+        type: Phaser.AUTO,
+        width: 1500,
+        height: 1000,
+        scene: {
+          preload: preload,
+          create: create,
+          update: update,
+        },
+        physics: {
+          default: "arcade",
+          arcade: {
+            gravity: { y: 0 },
+            debug: true,
+          },
+        },
+      };
       
-      if (cursors.left.isDown) {
-        dog.setVelocityX(-180);
-        dog.anims.play('left', true);
-      } else if (cursors.right.isDown) {
-        dog.setVelocityX(180);
-        dog.anims.play('right', true);
-      } else {
-        dog.setVelocityX(0);
-        dog.anims.play('turn', true);
+      var game = new Phaser.Game(config);
+
+      var dog;
+
+      var playerPoints = 0;
+      var pointText;
+
+      //added vars for text and time value
+      var timerText;
+      var timeLeft = 20;
+
+      score = playerPoints
+
+      function preload() {
+        this.load.spritesheet("dogrun", "idk/spritesheet (3).png", {
+          frameWidth: 250,
+          frameHeight: 198,
+        });
+        this.load.image("bone", "idk/bones.png");
+        this.load.image("ground", "idk/ground.png");
+        this.load.image("winscreen", "idk/win.png");
+        this.load.image("button", "idk/continue button.png");
       }
 
-      bones.children.iterate(function(bone) 
-      {
-        if (bone.y > this.cameras.main.height)
-        {
-          bone.y = Phaser.Math.Between(-200, -100);
-          bone.x = Phaser.Math.Between(150, this.cameras.main.width - 150);
+      function create() {
+
+        loadMoney();
+
+        // Center of screen
+        let x = this.cameras.main.width / 2;
+        let y = this.cameras.main.height / 2;
+        
+
+        this.add.image(x, 1000, "ground");
+
+        const numBones = 10;
+        const minDistance = 100;
+
+        bones = this.physics.add.group();
+
+        for (let i = 0; i < numBones; i++) {
+          let boneX, boneY;
+          let validPosition = false;
+
+          while (!validPosition) {
+            boneX = Phaser.Math.Between(150, this.cameras.main.width - 150);
+            boneY = Phaser.Math.Between(-200, -100);
+
+            validPosition = true;
+            bones.children.iterate(function (bone) {
+              const distance = Phaser.Math.Distance.Between(
+                boneX,
+                boneY,
+                bone.x,
+                bone.y
+              );
+              if (distance < minDistance) {
+                validPosition = false;
+              }
+            });
+          }
+          let bone = bones.create(boneX, boneY, "bone");
           bone.setVelocityY(Phaser.Math.Between(150, 250));
         }
-      }, this); 
-}
-    
-    function addPoints (dog, bone)
-    {
-      bone.destroy()
-      playerPoints += 1;
-      pointText.setText('score: ' + playerPoints);
-    }
-  </script>
-  <script src="moneySystem.js"></script>
-</body>
+
+        bones.children.iterate(function (bone) {
+          bone.setVelocityY(200);
+        });
+
+        dog = this.physics.add.sprite(x, y + 380, "dogrun");
+        dog.setBounce(0.2);
+        dog.setCollideWorldBounds(true);
+
+        this.anims.create({
+          key: "left",
+          frames: this.anims.generateFrameNumbers("dogrun", {
+            start: 0,
+            end: 1,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "right",
+          frames: this.anims.generateFrameNumbers("dogrun", {
+            start: 3,
+            end: 4,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "turn",
+          frames: [{ key: "dogrun", frame: 2 }],
+          frameRate: 20,
+        });
+
+        this.physics.add.overlap(dog, bones, addPoints, null, this);
+
+        pointText = this.add.text(1300, 50, "score: 0", {fontFamily: 'Arial Black', fontSize: "32px", fill: '#ffffff'});
+
+        // create timer text
+        timerText = this.add.text(50, 50, "Time left: " + timeLeft, {
+          fontFamily: 'Arial Black',
+          fontSize: "32px",
+          fill: "#ffffff",
+        });
+
+        // run timer event event
+        this.time.addEvent({
+          delay: 1000, // 1 second
+          callback: updateTimer,
+          callbackScope: this,
+          loop: true,
+        });
+
+        win = this.add.image(x, y, 'winscreen');
+        button = this.add.image(x + 320, y + 200, 'button');
+
+        button.visible = false;
+        win.visible = false;
+
+        button.setInteractive();
+        button.on('pointerdown', () => window.location.href="HomePage.html");
+        button.on('pointerover', () => button.setScale(1.02));
+        button.on('pointerout', () => button.setScale(1));
+      }
+
+      var inputEnabled = true;
+
+      function update() {
+        const cursors = this.input.keyboard.createCursorKeys();
+
+        if (inputEnabled) {
+        if (cursors.left.isDown) {
+          dog.setVelocityX(-180);
+          dog.anims.play("left", true);
+        } else if (cursors.right.isDown) {
+          dog.setVelocityX(180);
+          dog.anims.play("right", true);
+        } else {
+          dog.setVelocityX(0);
+          dog.anims.play("turn", true);
+        }
+      }
+
+        bones.children.iterate(function (bone) {
+          if (bone.y > this.cameras.main.height) {
+            bone.y = Phaser.Math.Between(-200, -100);
+            bone.x = Phaser.Math.Between(150, this.cameras.main.width - 150);
+            bone.setVelocityY(Phaser.Math.Between(150, 250));
+          }
+        }, this);
+      }
+
+      function addPoints(dog, bone) {
+        bone.destroy();
+        playerPoints += 1;
+        pointText.setText("score: " + playerPoints);
+      }
+
+      function updateTimer() {
+        if (timeLeft > 0) {
+          timeLeft -= 1;
+          timerText.setText("Time left: " + timeLeft);
+        } else {
+          inputEnabled = false;
+          addMoney(playerPoints);
+          bones.children.iterate(function (bone) {
+            bone.setVelocityY(0); 
+          });
+
+
+          timesup = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, "Times Up!", { fontFamily: 'Arial Black', fontSize: "64px", fill: "#ffffff" }).setOrigin(0.5);
+          setTimeout( () => {
+            button.visible = true;
+            win.visible = true;
+            timesup.destroy();
+          }, 1500)
+        }
+      }
+    </script>
+    <script src="moneySystem.js"></script>
+  </body>
 </html>
