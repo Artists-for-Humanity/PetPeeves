@@ -104,7 +104,7 @@
 
     function create ()
     {
-
+      storedSoap();
       loadMoney();
 
       //center of screen
@@ -223,6 +223,7 @@
 
      
       let score = 0;
+      let active_soap = true; 
 
       
       function updateScoreDisplay() {
@@ -235,15 +236,19 @@
       soap_button.on('pointerout', () => soap_button.setScale(1));
       soap_button.on('pointerdown', () => {
 
-        let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
-            clearInterval(intervalId); 
-            health_cur += 50; 
-            health.style.width = health_cur + "px";
-            localStorage.setItem("health_value", health_cur);
-            startHealthDecrease(); 
+        if(active_soap){
+          let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+          clearInterval(intervalId); 
+          health_cur += 50; 
+          health.style.width = health_cur + "px";
+          localStorage.setItem("health_value", health_cur);
+          startHealthDecrease(); 
+        }
        
-        score++;
-        updateScoreDisplay(); 
+        if(active_soap){
+          score++
+          updateScoreDisplay(); 
+        }
         
         dogbath.visible = true;
         dogidle.visible = false;
@@ -252,6 +257,8 @@
         soap_button.disableInteractive();
         shop_button.disableInteractive();
         ball_button.disableInteractive();
+
+        subtractSoap(1);
 
         setTimeout(() => {
           dogbath.visible = false;
@@ -267,6 +274,14 @@
 
 
       moneyText = this.add.text(x + 475, y + 450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
+
+      soapText = this.add.text(1400, 620, 'Soap: ' + soapCount, { fontFamily: 'Arial Black', fontSize: '20px', fill: '#00000' });
+
+      if (soapCount <= 0)
+      {
+        console.log('nosoap');
+        active_soap = false; 
+      }
     }
 
     function update ()
@@ -278,5 +293,6 @@
 </body>
 
 <script src="moneySystem.js"></script>
+<script src = "soapcount.js"></script>
 
 </html>

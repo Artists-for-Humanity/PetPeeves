@@ -76,12 +76,14 @@
 
       shampoo1.setInteractive();
       shampoo1.on('pointerdown', function () {subtractMoney(10);});
+      shampoo1.on('pointerdown', function () {addSoap(1)});
       shampoo1.on('pointerover', function () {shampoo1.setScale(1.1)});
       shampoo1.on('pointerout', function () {shampoo1.setScale(1)});
 
       shampoo2.setInteractive();
       shampoo2.setScale(.35)
       shampoo2.on('pointerdown', function () {subtractMoney(20)});
+      shampoo2.on('pointerdown', function () {addSoap(1)});
       shampoo2.on('pointerover', function () {shampoo2.setScale(.36)});
       shampoo2.on('pointerout', function () {shampoo2.setScale(.35)})
     
@@ -110,5 +112,6 @@
 </body>
 
 <script src="moneySystem.js"></script>
+<script src = "soapcount.js"></script>
 
 </html>
