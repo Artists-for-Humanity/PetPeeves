@@ -31,20 +31,35 @@
     
  
   <div style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: white; border: 5px solid black; height: 40px;"></div>
-  <div id="health" style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: red; border: 5px solid black; height: 40px;"></div>
+  <div id="health" style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: red; border: 5px solid black; height: 40px; border-right: none;"></div>
   
   <script>
-    const health = document.getElementById("health")
-    document.addEventListener("DOMContentLoaded", function() {
-      let health_cur = 700;
-      setInterval(() => {
-        health.style.width = health_cur + "px";
-        health_cur -= 1.1;
-          if (health_cur < 0) {
-            health_cur = 0; 
-          }
-      }, 100);
-  });
+        const health = document.getElementById("health");
+        const food_button = document.getElementById("food_button");
+        let intervalId;
+
+        function updateHealth() {
+            let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+            health.style.width = health_cur + "px";
+        }
+
+        function startHealthDecrease() {
+            intervalId = setInterval(() => {
+                let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+                health_cur -= 1.1;
+                if (health_cur < 0) {
+                    health_cur = 0;
+                    clearInterval(intervalId);
+                }
+                health.style.width = health_cur + "px";
+                localStorage.setItem("health_value", health_cur);
+            }, 100);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateHealth();
+            startHealthDecrease();
+        });
   </script>
 
   <script type = "text/javascript">
@@ -175,6 +190,14 @@
       food_button.on('pointerout', () => food_button.setScale(1));
       food_button.on('pointerdown', () =>  
       {
+
+        let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+            clearInterval(intervalId); 
+            health_cur += 50; 
+            health.style.width = health_cur + "px";
+            localStorage.setItem("health_value", health_cur);
+            startHealthDecrease(); 
+
         dogeat.visible = true;
         dogidle.visible = false;
 
@@ -211,6 +234,13 @@
       soap_button.on('pointerover', () => soap_button.setScale(1.02));
       soap_button.on('pointerout', () => soap_button.setScale(1));
       soap_button.on('pointerdown', () => {
+
+        let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+            clearInterval(intervalId); 
+            health_cur += 50; 
+            health.style.width = health_cur + "px";
+            localStorage.setItem("health_value", health_cur);
+            startHealthDecrease(); 
        
         score++;
         updateScoreDisplay(); 
