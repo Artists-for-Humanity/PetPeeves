@@ -30,9 +30,22 @@
   </div>
     
  
-
-
-
+  <div style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: white; border: 5px solid black; height: 40px;"></div>
+  <div id="health" style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: red; border: 5px solid black; height: 40px;"></div>
+  
+  <script>
+    const health = document.getElementById("health")
+    document.addEventListener("DOMContentLoaded", function() {
+      let health_cur = 700;
+      setInterval(() => {
+        health.style.width = health_cur + "px";
+        health_cur -= 1.1;
+          if (health_cur < 0) {
+            health_cur = 0; 
+          }
+      }, 100);
+  });
+  </script>
 
 
   <script type = "text/javascript">
