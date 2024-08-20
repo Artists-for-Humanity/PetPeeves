@@ -57,6 +57,7 @@
                 localStorage.setItem("health_value", health_cur);
             }, 100);
         }
+        
 
         document.addEventListener("DOMContentLoaded", function() {
             updateHealth();
@@ -103,6 +104,9 @@
       this.load.image('tossButton', 'sprites/tossButton.png');
       this.load.image('tug', 'sprites/tugButton.png');
 
+      this.load.image('dirty1', 'dog_sprites/dirty1.png');
+      this.load.image('dirty2', 'dog_sprites/dirty2.png')
+
 
     }
 
@@ -121,15 +125,16 @@
       const food_button = this.add.image(1400, 300, 'food');
       const soap_button = this.add.image(1400, 500, 'soap');
 
-      const dogidle = this.add.image(x, 690, 'dogidle');
+      this.dogidle = this.add.image(x, 690, 'dogidle');
       const dogeat = this.add.image(x, 690, 'dogeat');
       dogeat.visible = false;
       const dogbath = this.add.image(x, 690, 'dogbath');
       dogbath.visible = false;
-      const dirty1 =  this.add.image(x, 690, 'dirty1');
-      dirty1.visible = false;
-      const dirty2 = this.add.image(x, 690, 'dirty2');
-      dirty2.visible = false;
+
+      this.dirty1 = this.add.image(x, 690, 'dirty1');
+      this.dirty1.visible = false;
+      this.dirty2 = this.add.image(x, 690, 'dirty2');
+      this.dirty2.visible = false;
 
       miniGame = this.add.image(x, y, 'minigameMenu')
       miniGame.visible = false;
@@ -207,7 +212,7 @@
             startHealthDecrease(); 
 
         dogeat.visible = true;
-        dogidle.visible = false;
+        this.dogidle.visible = false;
 
         food_button.disableInteractive();
         soap_button.disableInteractive();
@@ -217,7 +222,7 @@
         setTimeout( () =>
         {
           dogeat.visible = false;
-          dogidle.visible = true;
+          this.dogidle.visible = true;
 
           food_button.setInteractive();
           soap_button.setInteractive();
@@ -243,7 +248,7 @@
       soap_button.on('pointerover', () => soap_button.setScale(1.02));
       soap_button.on('pointerout', () => soap_button.setScale(1));
       soap_button.on('pointerdown', () => {
-
+      
         if(active_soap){
           let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
           clearInterval(intervalId); 
@@ -259,7 +264,7 @@
         }
         
         dogbath.visible = true;
-        dogidle.visible = false;
+        this.dogidle.visible = false;
 
         food_button.disableInteractive();
         soap_button.disableInteractive();
@@ -270,14 +275,26 @@
 
         setTimeout(() => {
           dogbath.visible = false;
-          dogidle.visible = true;
+          this.dogidle.visible = true;
 
           food_button.setInteractive();
-          soap_button.setInteractive();
           shop_button.setInteractive();
           ball_button.setInteractive();
           
         }, 1500);
+
+        setTimeout( () =>
+        {
+          soap_button.setInteractive();
+        }, 4000);
+
+        if (soapCount <= 0)
+      {
+        console.log('nosoap');
+        active_soap = false; 
+      }
+
+
       });
 
 
@@ -285,14 +302,21 @@
 
       soapText = this.add.text(1400, 620, 'Soap: ' + soapCount, { fontFamily: 'Arial Black', fontSize: '20px', fill: '#00000' });
 
-      setTimeout (() =>
-      {
-        tutorial.visible = false;
-      }, 5000 ); 
     }
 
     function update ()
     {
+      let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+      console.log("Initial health_cur:", health_cur);
+      if (health_cur < 400) 
+      {
+        this.dirty1.visible = true;
+        this.dogidle.visible = false;
+      } if (health_cur < 200)
+      {
+        this.dirty1.visible = false;
+        this.dirty2.visible = true;
+      }
     }
 
   </script>
