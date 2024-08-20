@@ -193,8 +193,9 @@
       function addPoints(dog, bone) {
         bone.setAlpha(0); 
         playerPoints += 1;
+        playerMoney += 1;
         pointText.setText("score: " + playerPoints);
-        addMoney(playerPoints);
+        console.log(playerMoney)
         bone.destroy(); 
       }
 
