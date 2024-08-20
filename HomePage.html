@@ -90,6 +90,8 @@
       this.load.image('dogidle', 'dog_sprites/dog-wip.png');
       this.load.image('dogeat', 'dog_sprites/eat-wip.png');
       this.load.image('dogbath', 'dog_sprites/bathWip.png');
+      this.load.image('dirty1', 'dog_sprites/dirty1.png');
+      this.load.image('dirty2', 'dog_sprites/dirty2.png');
 
       this.load.image('shop','sprites/shopbutton-wip.png');
       this.load.image('bg', "sprites/house-Wip.png");
@@ -113,7 +115,7 @@
       x = this.cameras.main.width/2;
       y = this.cameras.main.height/2;
       this.add.image(x, y, 'bg');
-
+      
       const shop_button = this.add.image(100, 900, 'shop');
       const ball_button = this.add.image(1400, 100, 'ball');
       const food_button = this.add.image(1400, 300, 'food');
@@ -124,6 +126,10 @@
       dogeat.visible = false;
       const dogbath = this.add.image(x, 690, 'dogbath');
       dogbath.visible = false;
+      const dirty1 =  this.add.image(x, 690, 'dirty1');
+      dirty1.visible = false;
+      const dirty2 = this.add.image(x, 690, 'dirty2');
+      dirty2.visible = false;
 
       miniGame = this.add.image(x, y, 'minigameMenu')
       miniGame.visible = false;
@@ -279,11 +285,10 @@
 
       soapText = this.add.text(1400, 620, 'Soap: ' + soapCount, { fontFamily: 'Arial Black', fontSize: '20px', fill: '#00000' });
 
-      if (soapCount <= 0)
+      setTimeout (() =>
       {
-        console.log('nosoap');
-        active_soap = false; 
-      }
+        tutorial.visible = false;
+      }, 5000 ); 
     }
 
     function update ()
