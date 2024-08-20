@@ -7,11 +7,14 @@
   <title>Pet Peeves</title>
 </head>
 <body style="display: grid; place-items: center;  height: 100vh; width: 100%; margin: 0; background-image: url(load1.png); background-position: center; background-size: cover;">
-  <a href="tutorial.html">
+  <a href="tutorial.html" onclick="changeMoney()">
 
     <div>
       <img src="load2.png">
     </div>  
   </a>
+  <script>
+    localStorage.setItem("playerMoney", 0)
+  </script>
 </body>
 </html>

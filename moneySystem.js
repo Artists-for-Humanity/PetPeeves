@@ -1,4 +1,4 @@
-let playerMoney = 100;
+let playerMoney = 0;
 let moneyText; 
 
 function loadMoney() {
