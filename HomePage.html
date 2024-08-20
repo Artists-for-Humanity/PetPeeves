@@ -36,7 +36,6 @@
   
   <script>
         const health = document.getElementById("health");
-        const food_button = document.getElementById("food_button");
         let intervalId;
 
         function updateHealth() {
@@ -97,7 +96,6 @@
       this.load.image('shop','sprites/shopbutton-wip.png');
       this.load.image('bg', "sprites/house-Wip.png");
       this.load.image('ball', 'sprites/ball-wip.png');
-      this.load.image('food', 'sprites/dogfood-wip.png');
       this.load.image('soap', 'sprites/soap-wip.png');
       
       this.load.image('minigameMenu', 'sprites/minigame_menu.png');
@@ -122,7 +120,6 @@
       
       const shop_button = this.add.image(100, 900, 'shop');
       const ball_button = this.add.image(1400, 100, 'ball');
-      const food_button = this.add.image(1400, 300, 'food');
       const soap_button = this.add.image(1400, 500, 'soap');
 
       this.dogidle = this.add.image(x, 690, 'dogidle');
@@ -178,7 +175,6 @@
           scoreBoard.style.opacity = "0"; // Example of changing opacity
           toss_Button.setInteractive();
           tug.setInteractive();
-          food_button.disableInteractive();
           soap_button.disableInteractive();
           shop_button.disableInteractive();
         } 
@@ -189,7 +185,6 @@
           scoreBoard.style.opacity = "1"; // Example of restoring opacity
           toss_Button.disableInteractive();
           tug.disableInteractive();
-          food_button.setInteractive();
           soap_button.setInteractive();
           shop_button.setInteractive();
           click = 0;
@@ -197,42 +192,6 @@
       });
 
       
-
-     food_button.setInteractive();
-      food_button.on('pointerover', () => food_button.setScale(1.02));
-      food_button.on('pointerout', () => food_button.setScale(1));
-      food_button.on('pointerdown', () =>  
-      {
-
-        let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
-            clearInterval(intervalId); 
-            health_cur += 50; 
-            health.style.width = health_cur + "px";
-            localStorage.setItem("health_value", health_cur);
-            startHealthDecrease(); 
-
-        dogeat.visible = true;
-        this.dogidle.visible = false;
-
-        food_button.disableInteractive();
-        soap_button.disableInteractive();
-        shop_button.disableInteractive();
-        ball_button.disableInteractive();
-
-        setTimeout( () =>
-        {
-          dogeat.visible = false;
-          this.dogidle.visible = true;
-
-          food_button.setInteractive();
-          soap_button.setInteractive();
-          shop_button.setInteractive();
-          ball_button.setInteractive();
-
-        }, 1500
-        );
-      }
-      )
 
      
       let score = 0;
@@ -266,7 +225,7 @@
         dogbath.visible = true;
         this.dogidle.visible = false;
 
-        food_button.disableInteractive();
+
         soap_button.disableInteractive();
         shop_button.disableInteractive();
         ball_button.disableInteractive();
@@ -277,7 +236,7 @@
           dogbath.visible = false;
           this.dogidle.visible = true;
 
-          food_button.setInteractive();
+
           shop_button.setInteractive();
           ball_button.setInteractive();
           
