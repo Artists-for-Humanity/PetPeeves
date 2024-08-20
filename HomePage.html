@@ -91,6 +91,8 @@
       this.load.image('dogidle', 'dog_sprites/dog-wip.png');
       this.load.image('dogeat', 'dog_sprites/eat-wip.png');
       this.load.image('dogbath', 'dog_sprites/bathWip.png');
+      this.load.image('dirty1', 'dog_sprites/dirty1.png');
+      this.load.image('dirty2', 'dog_sprites/dirty2.png');
 
       this.load.image('shop','sprites/shopbutton-wip.png');
       this.load.image('bg', "sprites/house-Wip.png");
@@ -117,7 +119,7 @@
       x = this.cameras.main.width/2;
       y = this.cameras.main.height/2;
       this.add.image(x, y, 'bg');
-
+      
       const shop_button = this.add.image(100, 900, 'shop');
       const ball_button = this.add.image(1400, 100, 'ball');
       const food_button = this.add.image(1400, 300, 'food');
@@ -128,6 +130,7 @@
       dogeat.visible = false;
       const dogbath = this.add.image(x, 690, 'dogbath');
       dogbath.visible = false;
+
       this.dirty1 = this.add.image(x, 690, 'dirty1');
       this.dirty1.visible = false;
       this.dirty2 = this.add.image(x, 690, 'dirty2');
@@ -299,8 +302,6 @@
 
       soapText = this.add.text(1400, 620, 'Soap: ' + soapCount, { fontFamily: 'Arial Black', fontSize: '20px', fill: '#00000' });
 
-
-      
     }
 
     function update ()
