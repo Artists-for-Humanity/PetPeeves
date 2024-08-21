@@ -32,7 +32,7 @@
           default: "arcade",
           arcade: {
             gravity: { y: 0 },
-            debug: false,
+            debug: true,
           },
         },
       };
@@ -99,6 +99,7 @@
         dog = this.physics.add.sprite(x, y + 380, "dogrun");
         dog.setBounce(0.2);
         dog.setCollideWorldBounds(true);
+        dog.setSize(100, 100);
 
         this.anims.create({
           key: "left",
@@ -197,7 +198,6 @@
         playerPoints += 1;
         addMoney(1);
         pointText.setText("score: " + playerPoints);
-        //console.log(playerMoney)
         console.log(playerMoney)
         bone.destroy(); 
       }
