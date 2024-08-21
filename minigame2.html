@@ -161,37 +161,53 @@
         
       }
 
-      function update() {
-        if (stopMoving) {
-          // If the game is over, stop all movement
-          dog.setVelocityX(0);
-          bones.children.iterate(function (bone) {
-            bone.setVelocityY(0);
-          });
-          return; // Exit the update function
-        }
-        
-        const cursors = this.input.keyboard.createCursorKeys();
+      // Define movement constants
+const MAX_SPEED = 300; // Maximum speed when running
+const TURN_SPEED = 100; // Speed when turning
+const ACCELERATION = 10; // How quickly the dog speeds up
+const DECELERATION = 0.95; // How quickly the dog slows down when turning
 
-        if (cursors.left.isDown) {
-          dog.setVelocityX(-180);
-          dog.anims.play("left", true);
-        } else if (cursors.right.isDown) {
-          dog.setVelocityX(180);
-          dog.anims.play("right", true);
-        } else {
-          dog.setVelocityX(0);
-          dog.anims.play("turn", true);
-        }
+function update() {
+  if (stopMoving) {
+    // If the game is over, stop all movement
+    dog.setVelocityX(0);
+    bones.children.iterate(function (bone) {
+      bone.setVelocityY(0);
+    });
+    return; // Exit the update function
+  }
 
-        bones.children.iterate(function (bone) {
-          if (bone.y > this.cameras.main.height) {
-            bone.y = Phaser.Math.Between(-200, -100);
-            bone.x = Phaser.Math.Between(150, this.cameras.main.width - 150);
-            bone.setVelocityY(Phaser.Math.Between(150, 250));
-          }
-        }, this);
-      }
+  const cursors = this.input.keyboard.createCursorKeys();
+  
+  // Adjust velocity based on input
+  if (cursors.left.isDown) {
+    // Accelerate to full speed when moving left
+    dog.setVelocityX(Math.max(dog.body.velocity.x - ACCELERATION, -MAX_SPEED));
+    dog.anims.play("left", true);
+  } else if (cursors.right.isDown) {
+    // Accelerate to full speed when moving right
+    dog.setVelocityX(Math.min(dog.body.velocity.x + ACCELERATION, MAX_SPEED));
+    dog.anims.play("right", true);
+  } else {
+    // Gradually slow down when turning
+    if (Math.abs(dog.body.velocity.x) > TURN_SPEED) {
+      dog.setVelocityX(dog.body.velocity.x * DECELERATION);
+    } else {
+      dog.setVelocityX(0);
+    }
+    dog.anims.play("turn", true);
+  }
+
+  bones.children.iterate(function (bone) {
+    if (bone.y > this.cameras.main.height) {
+      bone.y = Phaser.Math.Between(-200, -100);
+      bone.x = Phaser.Math.Between(150, this.cameras.main.width - 150);
+      bone.setVelocityY(Phaser.Math.Between(200, 350)); // Speed of falling bones
+    }
+  }, this);
+}
+
+
 
       function addPoints(dog, bone) {
         bone.setAlpha(0); 
