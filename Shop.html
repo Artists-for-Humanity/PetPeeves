@@ -57,54 +57,68 @@
       //this.load.image('cheapstuff', 'sprites/testing sprites/stuff 2.png');
     }
 
-    function create ()
-    {
+    function create () {
       loadMoney();
+      storedSoap();
 
-      const x = this.cameras.main.width/2;
-      const y = this.cameras.main.height/2;
-      this.add.image(x, y, 'shopbg');
+  const x = this.cameras.main.width/2;
+  const y = this.cameras.main.height/2;
+  this.add.image(x, y, 'shopbg');
 
-      backButton = this.add.image(100, 100, 'backButton');
-      backButton.setInteractive();
-      backButton.on('pointerover', () => backButton.setScale(1.02));
-      backButton.on('pointerout', () => backButton.setScale(1));
-      backButton.on('pointerdown', () => window.location.href = 'HomePage.html');
+  backButton = this.add.image(100, 100, 'backButton');
+  backButton.setInteractive();
+  backButton.on('pointerover', () => backButton.setScale(1.02));
+  backButton.on('pointerout', () => backButton.setScale(1));
+  backButton.on('pointerdown', () => window.location.href = 'HomePage.html');
 
-      var shampoo1 = this.add.image(x - 500, y - 50, 'shampoo1');
-      var shampoo2 = this.add.image(x + 500, y - 50, 'shampoo2');
+  var shampoo1 = this.add.image(x - 500, y - 50, 'shampoo1');
+  var shampoo2 = this.add.image(x + 500, y - 50, 'shampoo2');
 
-      shampoo1.setInteractive();
-      shampoo1.on('pointerdown', function () {subtractMoney(10);});
-      shampoo1.on('pointerdown', function () {addSoap(1)});
-      shampoo1.on('pointerover', function () {shampoo1.setScale(1.1)});
-      shampoo1.on('pointerout', function () {shampoo1.setScale(1)});
-
-      shampoo2.setInteractive();
-      shampoo2.setScale(.35)
-      shampoo2.on('pointerdown', function () {subtractMoney(20)});
-      shampoo2.on('pointerdown', function () {addSoap(1)});
-      shampoo2.on('pointerover', function () {shampoo2.setScale(.36)});
-      shampoo2.on('pointerout', function () {shampoo2.setScale(.35)})
-    
-      const cart = this.add.image(x + 50, y + 400, 'cart');
-
-      moneyText = this.add.text(x-130, y-450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
-
-      var noMoney = this.add.text(x - 160, y - 100, "No Money!", { fontFamily: 'Arial Black', fontSize: '50px', fill: "#FF0000"});
-      noMoney.visible = false;
-
-      if (playerMoney <= 0)
-      {
-        noMoney.visible = true;
-      } if (playerMoney > 0)
-      {
-        noMoney.visible = false;
-      }
+  shampoo1.setInteractive();
+  shampoo1.on('pointerdown', function () { 
+    if (playerMoney >= 10) { // Check if there is enough money
+      subtractMoney(10);
+      addSoap(1);
+    } else {
+      showNoMoneyMessage();
     }
+  });
+  shampoo1.on('pointerover', function () {shampoo1.setScale(1.1)});
+  shampoo1.on('pointerout', function () {shampoo1.setScale(1)});
+
+  shampoo2.setInteractive();
+  shampoo2.setScale(0.35);
+  shampoo2.on('pointerdown', function () { 
+    if (playerMoney >= 20) { // Check if there is enough money
+      subtractMoney(20);
+      if (soapTrue) {
+        addSoap(1);
+      }
+    } else {
+      showNoMoneyMessage();
+    }
+  });
+  shampoo2.on('pointerover', function () {shampoo2.setScale(0.36)});
+  shampoo2.on('pointerout', function () {shampoo2.setScale(0.35)});
+
+  const cart = this.add.image(x + 50, y + 400, 'cart');
+
+  moneyText = this.add.text(x - 130, y - 450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
+
+  var noMoney = this.add.text(x - 160, y - 100, "No Money!", { fontFamily: 'Arial Black', fontSize: '50px', fill: "#FF0000"});
+  noMoney.visible = false;
+
+  function showNoMoneyMessage() {
+    noMoney.visible = true;
+    setTimeout(() => { noMoney.visible = false; }, 2000); // Hide the message after 2 seconds
+  }
+}
+
+      // your mom :D X3 UILGYSIGLYIGGIHL
 
     function update ()
     {
+      console.log(soapCount)
     }
     
   </script>

@@ -1,4 +1,4 @@
-let soapCount = 2;
+let soapCount = 0;
 let soapText; 
 
 function storedSoap() {

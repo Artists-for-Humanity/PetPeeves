@@ -7,117 +7,98 @@
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
   <title>Pet Peeves</title>
 
-  <style type = "text/css">
-    body
-    {
+  <style type="text/css">
+    body {
       background: #ffE3e4;
     }
-
-    canvas
-    {
+    canvas {
       display: block;
       margin: auto;
       margin-top: 25px;
     }
   </style>
 </head>
-
-
 <body>
   <div class="scoreClear" id="scoreClear" style="opacity: 1;">
     <img src="./sprites/photo-frame.png" style="position: absolute; left: 40%; width: 20vw; height: 30vh;">
-    <div class="mainScore" style=" font-size: 3vw; position: absolute; top: 17vh; left: 45%;" id="scoreDisplay"> Score: 0</div>
+    <div class="mainScore" style="font-size: 3vw; position: absolute; top: 17vh; left: 45%;" id="scoreDisplay"> Score: 0</div>
   </div>
-    
- 
+  
   <div style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: white; border: 5px solid black; height: 40px;"></div>
   <div id="health" style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: red; border: 5px solid black; height: 40px;"></div>
   <div id="lose" style="height: 100vh; width: 100%; position: absolute; display: none; place-items: center; background-color: white; top: 0; left: 0; font-size: 5rem;">Game Over</div>
   
   <script>
-        const health = document.getElementById("health");
-        let intervalId;
+    const health = document.getElementById("health");
+    let intervalId;
 
-        function updateHealth() {
-            let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
-            health.style.width = health_cur + "px";
+    function updateHealth() {
+      let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+      health.style.width = health_cur + "px";
+    }
+
+    function startHealthDecrease() {
+      intervalId = setInterval(() => {
+        let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
+        health_cur -= 1.1;
+        if (health_cur < 0) {
+          health_cur = 0;
+          document.getElementById("lose").style.display = "grid";
+          clearInterval(intervalId);
         }
-
-        function startHealthDecrease() {
-            intervalId = setInterval(() => {
-                let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
-                health_cur -= 1.1;
-                if (health_cur < 0) {
-                    health_cur = 0;
-                    document.getElementById("lose").style.display = "grid"
-                    clearInterval(intervalId);
-                }
-                health.style.width = health_cur + "px";
-                localStorage.setItem("health_value", health_cur);
-            }, 100);
-        }
-        
-
-        document.addEventListener("DOMContentLoaded", function() {
-            updateHealth();
-            startHealthDecrease();
-        });
+        health.style.width = health_cur + "px";
+        localStorage.setItem("health_value", health_cur);
+      }, 100);
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+      updateHealth();
+      startHealthDecrease();
+    });
   </script>
 
-  <script type = "text/javascript">
-  const script = document.createElement('script');
-  script.src = 'moneySystem.js';
-  document.head.appendChild(script);
-  
-  var config = 
-    {
+  <script type="text/javascript">
+    const script = document.createElement('script');
+    script.src = 'moneySystem.js';
+    document.head.appendChild(script);
+
+    var config = {
       type: Phaser.AUTO,
       width: 1500,
       height: 1000,
-      scene: 
-      {
+      scene: {
         preload: preload,
         create: create,
         update: update,
       }
-    }
-    
+    };
+
     var game = new Phaser.Game(config);
 
-    function preload ()
-    {
-
+    function preload() {
       this.load.image('dogidle', 'dog_sprites/dog-wip.png');
       this.load.image('dogeat', 'dog_sprites/eat-wip.png');
       this.load.image('dogbath', 'dog_sprites/bathWip.png');
       this.load.image('dirty1', 'dog_sprites/dirty1.png');
       this.load.image('dirty2', 'dog_sprites/dirty2.png');
-
-      this.load.image('shop','sprites/shopbutton-wip.png');
+      this.load.image('shop', 'sprites/shopbutton-wip.png');
       this.load.image('bg', "sprites/house-Wip.png");
       this.load.image('ball', 'sprites/ball-wip.png');
       this.load.image('soap', 'sprites/soap-wip.png');
-      
       this.load.image('minigameMenu', 'sprites/minigame_menu.png');
       this.load.image('tossButton', 'sprites/tossButton.png');
       this.load.image('tug', 'sprites/tugButton.png');
-
-      this.load.image('dirty1', 'dog_sprites/dirty1.png');
-      this.load.image('dirty2', 'dog_sprites/dirty2.png')
-
-
     }
 
-    function create ()
-    {
+    function create() {
       storedSoap();
       loadMoney();
 
-      //center of screen
-      x = this.cameras.main.width/2;
-      y = this.cameras.main.height/2;
+      // Center of screen
+      let x = this.cameras.main.width / 2;
+      let y = this.cameras.main.height / 2;
       this.add.image(x, y, 'bg');
-      
+
       const shop_button = this.add.image(100, 900, 'shop');
       const ball_button = this.add.image(1400, 100, 'ball');
       const soap_button = this.add.image(1400, 500, 'soap');
@@ -133,42 +114,39 @@
       this.dirty2 = this.add.image(x, 690, 'dirty2');
       this.dirty2.visible = false;
 
-      miniGame = this.add.image(x, y, 'minigameMenu')
+      miniGame = this.add.image(x, y, 'minigameMenu');
       miniGame.visible = false;
 
-      toss_Button = this.add.image(x, y - 300, 'tossButton')
+      toss_Button = this.add.image(x, y - 300, 'tossButton');
       toss_Button.visible = false;
       toss_Button.disableInteractive();
       toss_Button.on('pointerover', () => toss_Button.setScale(1.02));
       toss_Button.on('pointerout', () => toss_Button.setScale(1));
-      toss_Button.on('pointerdown', () => window.location.href="toss.html");
+      toss_Button.on('pointerdown', () => window.location.href = "toss.html");
 
       tug = this.add.image(x, y - 100, 'tug');
       tug.visible = false;
       tug.disableInteractive();
       tug.on('pointerover', () => tug.setScale(1.02));
       tug.on('pointerout', () => tug.setScale(1));
-      tug.on('pointerdown', () => window.location.href="minigame2.html");
-
+      tug.on('pointerdown', () => window.location.href = "minigame2.html");
 
       shop_button.setInteractive();
       shop_button.on('pointerover', () => shop_button.setScale(1.02));
-      shop_button.on('pointerout', () => shop_button.setScale(1.0));
-      shop_button.on('pointerdown', () => window.location.href="Shop.html");
+      shop_button.on('pointerout', () => shop_button.setScale(1));
+      shop_button.on('pointerdown', () => window.location.href = "Shop.html");
 
-      var click = 0;
-
+      let click = 0;
 
       ball_button.setInteractive();
       ball_button.on('pointerover', () => ball_button.setScale(1.02));
       ball_button.on('pointerout', () => ball_button.setScale(1));
-      ball_button.on('pointerdown', () =>
-      { 
-        var scoreBoard = document.getElementById("scoreClear");
-        var scoreOpacity = scoreBoard.style.opacity;
+      ball_button.on('pointerdown', () => {
+        let scoreBoard = document.getElementById("scoreClear");
+        let scoreOpacity = scoreBoard.style.opacity;
         console.log(scoreOpacity);  // This should now correctly log the current opacity value.
         click += 1;
-        if (click == 1) {
+        if (click === 1) {
           miniGame.visible = true;
           toss_Button.visible = true;
           tug.visible = true;
@@ -177,8 +155,7 @@
           tug.setInteractive();
           soap_button.disableInteractive();
           shop_button.disableInteractive();
-        } 
-        if (click == 2) {
+        } else if (click === 2) {
           miniGame.visible = false;
           toss_Button.visible = false;
           tug.visible = false;
@@ -191,98 +168,87 @@
         }
       });
 
-      
-
-     
       let score = 0;
-      let active_soap = true; 
+      let active_soap = true;
 
-      
       function updateScoreDisplay() {
         document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
       }
 
-      
       soap_button.setInteractive();
       soap_button.on('pointerover', () => soap_button.setScale(1.02));
       soap_button.on('pointerout', () => soap_button.setScale(1));
       soap_button.on('pointerdown', () => {
-      
-        if(active_soap){
+        console.log('clicked')
+       
+        let soapCount = parseInt(localStorage.getItem('soapCount')) || 0;
+
+        if (active_soap && soapCount > 0) {
           let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
-          clearInterval(intervalId); 
-          health_cur += 50; 
+          clearInterval(intervalId);
+          health_cur += 50;
           health.style.width = health_cur + "px";
           localStorage.setItem("health_value", health_cur);
-          startHealthDecrease(); 
+          startHealthDecrease();
+
+          score++;
+          updateScoreDisplay();
+
+          dogbath.visible = true;
+          this.dogidle.visible = false;
+
+          soap_button.disableInteractive();
+          shop_button.disableInteractive();
+          ball_button.disableInteractive();
+
+          subtractSoap(1);
+
+          setTimeout(() => {
+            dogbath.visible = false;
+            this.dogidle.visible = true;
+
+            shop_button.setInteractive();
+            ball_button.setInteractive();
+          }, 1500);
+
+          setTimeout(() => {
+            soap_button.setInteractive();
+          }, 3000);
+
+          soapCount = parseInt(localStorage.getItem('soap_count')) || 0;
+          if (soapCount <= 0) {
+            console.log('nosoap');
+            active_soap = false;
+          }
         }
-       
-        if(active_soap){
-          score++
-          updateScoreDisplay(); 
-        }
-        
-        dogbath.visible = true;
-        this.dogidle.visible = false;
-
-
-        soap_button.disableInteractive();
-        shop_button.disableInteractive();
-        ball_button.disableInteractive();
-
-        subtractSoap(1);
-
-        setTimeout(() => {
-          dogbath.visible = false;
-          this.dogidle.visible = true;
-
-
-          shop_button.setInteractive();
-          ball_button.setInteractive();
-          
-        }, 1500);
-
-        setTimeout( () =>
-        {
-          soap_button.setInteractive();
-        }, 4000);
-
-        if (soapCount <= 0)
-      {
-        console.log('nosoap');
-        active_soap = false; 
-      }
-
-
       });
 
-
+      let playerMoney = parseFloat(localStorage.getItem('playerMoney')) || 0;
       moneyText = this.add.text(x + 475, y + 450, 'money: $' + playerMoney, { fontFamily: 'Arial Black', fontSize: '32px', fill: '#00000' });
 
+      let soapCount = parseInt(localStorage.getItem('soapCount')) || 0;
       soapText = this.add.text(1400, 620, 'Soap: ' + soapCount, { fontFamily: 'Arial Black', fontSize: '20px', fill: '#00000' });
-
     }
 
-    function update ()
-    {
+    function update() {
       let health_cur = parseFloat(localStorage.getItem("health_value")) || 700;
       console.log("Initial health_cur:", health_cur);
-      if (health_cur < 400) 
-      {
-        this.dirty1.visible = true;
-        this.dogidle.visible = false;
-      } if (health_cur < 200)
-      {
-        this.dirty1.visible = false;
-        this.dirty2.visible = true;
-      }
-    }
-
+      if (health_cur < 200) {
+     this.dirty1.visible = false;
+     this.dirty2.visible = true;
+     this.dogidle.visible = false;
+   } else if (health_cur < 400) {
+     this.dirty1.visible = true;
+     this.dirty2.visible = false;
+     this.dogidle.visible = false;
+   } else {
+     this.dirty1.visible = false;
+     this.dirty2.visible = false;
+     this.dogidle.visible = true;
+  }
+}
   </script>
-
+  <script src = "moneySystem.js"></script>
+  <script src="soapcount.js"></script>
 </body>
-
-<script src="moneySystem.js"></script>
-<script src = "soapcount.js"></script>
-
 </html>
