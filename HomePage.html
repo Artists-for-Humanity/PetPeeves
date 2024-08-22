@@ -26,7 +26,12 @@
   
   <div style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: white; border: 5px solid black; height: 40px;"></div>
   <div id="health" style="position: absolute; top: 90px; left: 400px; width: 700px; background-color: red; border: 5px solid black; height: 40px;"></div>
-  <div id="lose" style="height: 100vh; width: 100%; position: absolute; display: none; place-items: center; background-color: white; top: 0; left: 0; font-size: 5rem;">Game Over</div>
+  <div id="lose" style="height: 100vh; width: 100%; position: absolute; display: none; place-items: center; background-color: white; top: 0; left: 0; font-size: 5rem; text-align: center;">
+    <a href="index.html">
+      <img src="dog_sprites/silly-dog-exploding.gif" alt="Game Over GIF" style="max-width: 80%; max-height: 80%; border: 5px solid black;"/>
+    </a>
+    <div>Game Over</div>
+  </div>
   
   <script>
     const health = document.getElementById("health");
